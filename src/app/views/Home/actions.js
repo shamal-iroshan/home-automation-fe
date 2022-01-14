@@ -41,3 +41,9 @@ export const addDevice = (data) => {
     payload: data
   }
 }
+export const setLoggedIn = (data) => {
+  return {
+    type: actionTypes.SET_LOGGING,
+    payload: data
+  }
+}

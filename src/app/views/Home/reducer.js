@@ -2,7 +2,8 @@ import * as actionTypes from "./constants";
 
 const initialState = {
   config: null,
-  devicesData: []
+  devicesData: [],
+  isLoggedIn: false
 };
 
 const homeReducer = (state = initialState, action) => {
@@ -16,6 +17,11 @@ const homeReducer = (state = initialState, action) => {
       return {
         ...state,
         config: action.payload
+      }
+    case actionTypes.SET_LOGGING:
+      return {
+        ...state,
+        isLoggedIn: action.payload
       }
     default:
       return state;

@@ -4,7 +4,7 @@ import Controls from "../../components/Controls";
 import {useSelector} from "react-redux";
 
 function Home() {
-  const isLoggedIn = true;
+  const isLoggedIn = useSelector((state) => state.homeReducer.isLoggedIn);
   const devicesData = useSelector((state) => state.homeReducer.devicesData);
 
   return(

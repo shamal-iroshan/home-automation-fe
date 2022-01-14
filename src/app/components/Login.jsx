@@ -1,9 +1,18 @@
 import React from "react";
+import {useDispatch} from "react-redux";
+import {setLoggedIn} from "../views/Home/actions";
 
 export default function Login() {
+  const dispatch = useDispatch();
   function formSubmit(event) {
     event.preventDefault();
-    console.log("submitted");
+    let username = event.target.elements.username.value;
+    let password = event.target.elements.password.value;
+    if (username === "shamal" && password === "Shamal@2000") {
+      dispatch(setLoggedIn(true))
+    } else {
+      alert("Check your username and password");
+    }
   }
 
   return (
