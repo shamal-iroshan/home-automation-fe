@@ -25,6 +25,9 @@ export default function Controls({devicesData}) {
       deviceId: device._id,
       state: device.state,
       name: name,
+      day: new Date().getDay(),
+      on: name === "automated" && device.state === 1 ? new Date().toLocaleTimeString() : undefined,
+      off: name === "automated" && device.state === 0 ? new Date().toLocaleTimeString() : undefined
     }
     dispatch(saveData(tempArray));
     dispatch(updateState(updateData));
@@ -61,38 +64,44 @@ export default function Controls({devicesData}) {
           setShowEdit={setShowEdit}
           devicesData={devicesData}
         />
-        <div className="row mb-5">
+        <div className="row mb-5" style={{width: 'inherit'}}>
           {
-            devicesData.map((item) => (
-              <div className="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mt-4" key={item._id}>
-                <div className="card" style={{width: '100%'}}>
+            devicesData.map((item, index) => (
+              <div className={`col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mt-4 ${index === 0 && "pl-0"}`}
+                   style={{width: 'inherit'}} key={item._id}>
+                <div className={`card ${item.device === "automated" && "bg-warning"} `}
+                     style={{width: 'inherit', height: 200}}>
                   <div className="card-body">
-                      {
-                        showEdit ?
-                          <div>
-                            <input
-                              type="text"
-                              defaultValue={item.device}
-                              onKeyPress={
-                                (event) => onEditDevice(event, item._id)
-                              } />
-                            <Icon
-                              icon="ant-design:close-circle-filled"
-                              color="#f30"
-                              width="20"
-                              height="20"
-                              className="mb-1 ml-1 mouse-hover"
-                              onClick={() => onRemoveDevice(item._id)}
-                            />
-                          </div>
-                          :
-                          <h5 className="card-title">{item.device}</h5>
-                      }
-                    <p className="card-text">This device will turn {item.state === 1 ? "off" : "on"} automatically by
-                      system.</p>
+                    {
+                      showEdit ?
+                        <div>
+                          <input
+                            type="text"
+                            defaultValue={item.device}
+                            onKeyPress={
+                              (event) => onEditDevice(event, item._id)
+                            }/>
+                          <Icon
+                            icon="ant-design:close-circle-filled"
+                            color="#f30"
+                            width="20"
+                            height="20"
+                            className="mb-1 ml-1 mouse-hover"
+                            onClick={() => onRemoveDevice(item._id)}
+                          />
+                        </div>
+                        :
+                        <h5 className="card-title">{item.device}</h5>
+                    }
+                    {
+                      item.device === "automated" &&
+                      <p className="card-text">This device will turn {item.state === 1 ? "off" : "on"} automatically by
+                        system.</p>
+                    }
                     <hr/>
                     <label className="switch">
-                      <input type="checkbox" checked={item.state === 1} onChange={() => onChangeSwitch(item._id, item.device)}/>
+                      <input type="checkbox" checked={item.state === 1}
+                             onChange={() => onChangeSwitch(item._id, item.device)}/>
                       <span className="slider round"/>
                     </label>
                   </div>

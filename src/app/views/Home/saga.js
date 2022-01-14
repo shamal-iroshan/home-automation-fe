@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from "redux-saga/effects";
+import {call, put, takeLatest} from "redux-saga/effects";
 import * as actionTypes from "./constants";
 import axios from "../../../axios/axios";
 import {saveConfig, saveData} from "./actions";
@@ -10,7 +10,17 @@ const getConfigAsync = async () => {
   return axios.get("/get-config").then(res => res.data);
 }
 const updateStateAsync = async (data) => {
-  return axios.patch(`/update-state?deviceId=${data.deviceId}&state=${data.state}&name=${data.name}`).then(res => res.data);
+  const values = {
+    deviceId: data.deviceId,
+    state: data.state,
+    name: data.name,
+    day: data.day,
+    on: data.on ? data.on : undefined,
+    off: data.off ? data.off : undefined,
+  }
+  return axios
+    .patch(`/update-state`, null, {params: values})
+    .then(res => res.data);
 }
 const updateDeviceAsync = async (data) => {
   return axios.patch(`/edit-device?deviceId=${data.deviceId}&deviceName=${data.name}`).then(res => res);
@@ -34,6 +44,7 @@ function* handleGetData() {
     console.error(e)
   }
 }
+
 function* handleUpdateState(data) {
   try {
     const details = data.payload;
@@ -42,6 +53,7 @@ function* handleUpdateState(data) {
     console.error(e)
   }
 }
+
 function* handleDeviceUpdate(data) {
   try {
     const details = data.payload;
@@ -54,6 +66,7 @@ function* handleDeviceUpdate(data) {
     console.error(e)
   }
 }
+
 function* handleDeviceDelete(data) {
   try {
     const details = data.payload;
@@ -66,6 +79,7 @@ function* handleDeviceDelete(data) {
     console.error(e)
   }
 }
+
 function* handleDeviceAdd(data) {
   try {
     const details = data.payload;
